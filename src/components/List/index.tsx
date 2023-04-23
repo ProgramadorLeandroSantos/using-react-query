@@ -11,13 +11,18 @@ import { api } from '../../api';
 function List(): JSX.Element {
 
     const [listData, setListData] = useState([]);
-    const [isDataLoading, setIsDataLoading] = useState(true);
+    const [isDataLoading, setIsDataLoading] = useState(false);
 
     const fetchListData = async () => {
-        setIsDataLoading(true);
-        const data = await api.getNames();
-        setListData(data)
-        setIsDataLoading(false);
+        try {
+            setIsDataLoading(true);
+            const data = await api.getNames();
+            setListData(data)
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setIsDataLoading(false);
+        }
     }
 
     useEffect(() => {
