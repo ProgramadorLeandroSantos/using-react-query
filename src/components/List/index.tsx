@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import {
-    FlatList,
-    Text,
-    TouchableOpacity,
-    View
-} from 'react-native';
+import React from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { api } from '../../api';
-
+import { useQuery } from 'react-query';
 
 function List(): JSX.Element {
 
-    const [listData, setListData] = useState([]);
-    const [isDataLoading, setIsDataLoading] = useState(false);
-
-    const fetchListData = async () => {
-        try {
-            setIsDataLoading(true);
-            const data = await api.getNames();
-            setListData(data)
-        } catch (error) {
-            console.log(error)
-        }finally{
-            setIsDataLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetchListData()
-    }, []);
-
+    const { data, isLoading } = useQuery('get-list-data', api.getNames)
 
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2 }}>
-            {isDataLoading ? (<Text style={{ fontSize: 32, color: 'black' }}>Loading...</Text>) : (
+            {isLoading ? (<Text style={{ fontSize: 32, color: 'black' }}>Loading...</Text>) : (
                 <FlatList
                     contentContainerStyle={{ flex: 2, marginVertical: 10, alignItems: 'center' }}
                     renderItem={({ item }) => {
@@ -47,7 +24,7 @@ function List(): JSX.Element {
                             </View>
                         )
                     }}
-                    data={listData}
+                    data={data}
                 />
             )}
 
