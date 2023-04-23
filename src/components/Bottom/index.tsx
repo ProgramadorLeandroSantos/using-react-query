@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
+import { useMutation, useQueryClient } from 'react-query';
+import { api } from '../../api';
 
 function Bottom(): JSX.Element {
-
+    const queryClient =  useQueryClient();
     const [txtValue, setTextValue] = useState("");
+    
+    const { mutate } = useMutation(()=> api.addName(txtValue),{
+        onSuccess: () =>  queryClient.invalidateQueries('get-list-data')
+    })
+    
 
     return (
         <View style={{
@@ -26,8 +33,8 @@ function Bottom(): JSX.Element {
                 placeholder='Adicionar Pessoa'
                 onEndEditing={() => setTextValue("")}
                 onSubmitEditing={() => {
-                    console.log(txtValue)
-                    setTextValue("")
+                    mutate();
+                    setTextValue("");
                 }}
             />
         </View>

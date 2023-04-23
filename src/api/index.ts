@@ -10,4 +10,13 @@ async function getNames() {
     }
 }
 
-export const api = { getNames };
+async function addName(name:any) {
+    try {
+        const { data } = await axios.post(url,{name});
+        return data;
+    } catch (error) {
+        console.log(JSON.stringify(error))
+    }
+}
+
+export const api = { getNames, addName };
